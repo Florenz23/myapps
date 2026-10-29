@@ -20,7 +20,7 @@
 | Weeks appear by themselves | The current week and the next 3 always exist, so planning never starts with a click. "+ Add week" (+ Woche hinzufügen) adds the next one | `01` |
 | Past weeks | Hidden behind "Show past weeks (33)" (Vergangene Wochen zeigen). Kept as history | `01` |
 | Pick a dish | Tap a day → the dish picker | `02` |
-| Cell menu | Long-press (right-click on desktop) a day → Edit dish · Change dish · Clear day | `03` |
+| Cell menu | Long-press a day → Edit dish · Change dish · Clear day | `03` |
 | Dish details | Ingredients, days in a row, preparation steps | `04` |
 | Leftovers | A dish that lasts several days fills the following days. Those show "↳ leftovers" (Reste) and never shop | `01` |
 | Buy checkbox | Under each dish: a checkbox + "4 ingr." / "no shopping" (kein Einkauf) / "ingredients?" (Zutaten?) | `01` |
@@ -116,7 +116,8 @@
 - **No confirm dialogs.** Every delete shows a short "Undo" toast instead
 - **Tap targets ≥ 44 px**, no hover-only controls, inputs ≥ 16 px so iOS doesn't zoom
 - **Safe areas** (notch, home indicator), `viewport-fit=cover`
-- **Wide screens (≥ 900 px):** the reference layout: the week table and the three lists side by side
+- **Mobile only, no desktop view.** On a wider screen (e.g. the browser while building) the phone
+  layout stays centered at phone width
 
 ## 5 · Data
 
@@ -150,14 +151,13 @@
 - [ ] Everything in §1 and §2 works on the phone with touch only
 - [ ] All 10 rules in "The rules between the plan and the main list" hold
 - [ ] The plan survives closing and reopening the app
-- [ ] Wide screen shows the week table and the three lists side by side
 - [ ] Installed on the iPhone, opens from the home screen, no browser bar
 
 ## 8b · The look — picked from mockups
 
 > Four style options were generated (Gemini) for only two screens, Plan and Shopping, in
 > `mockups/`. The pick is **option B, clean iOS**. Every other view (picker sheet, cell menu,
-> dish details, Dishes tab, ingredients prompt, toasts, wide screen) gets the **same style**:
+> dish details, Dishes tab, ingredients prompt, toasts) gets the **same style**:
 > no mockup per view, carry the look over.
 
 ![Picked style](mockups/option-b-clean-ios-1793281789692.jpeg)
