@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "meal-planner",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["exec", "vite", "--host", "--port", "5183", "--strictPort"],
+      "port": 5183
+    }
+  ]
+}
