@@ -2,6 +2,7 @@ name: iOS build (unsigned .ipa)
 
 # Manual only — never on push. Run it from the Actions tab: "Run workflow". Needed once for
 # native changes (name, icon, plugins); everything else arrives as a live update (web.yml).
+# The result: github.com/Florenz23/myapps/releases → myApps.ipa → open it in SideStore.
 on:
   workflow_dispatch:
 
