@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { ChevronRight, LayoutGrid, Search } from 'lucide-react'
+import { ChevronRight, Search } from 'lucide-react'
 import { listMsg, useApp } from '../ctx'
 import { deleteDish, dishStats, norm } from '../logic'
 import type { Dish } from '../types'
@@ -8,7 +8,7 @@ import { Segmented } from '../ui/controls'
 type Filter = 'all' | 'weekday' | 'weekend'
 
 /** All dishes: how often eaten, other spellings, weekday or weekend. Tap to edit, swipe left to delete. */
-export function DishesTab({ onSwitchApp }: { onSwitchApp?: () => void }) {
+export function DishesTab() {
   const { state, openDish } = useApp()
   const [q, setQ] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
@@ -60,13 +60,6 @@ export function DishesTab({ onSwitchApp }: { onSwitchApp?: () => void }) {
       </div>
       <p className="px-4 pt-2 text-[13px] text-label2">New dishes come from the plan: type one in the picker.</p>
 
-      {onSwitchApp && (
-        <button onClick={onSwitchApp} className="mt-8 flex h-12 w-full items-center gap-3 rounded-[12px] bg-card px-4 text-[17px]">
-          <LayoutGrid size={20} className="text-accent-ink" />
-          <span className="flex-1 text-left">Switch app</span>
-          <ChevronRight size={18} className="text-label3" />
-        </button>
-      )}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { CalendarDays, ChefHat, ShoppingCart } from 'lucide-react'
+import { CalendarDays, ChefHat, Settings, ShoppingCart } from 'lucide-react'
 import { Ctx, listMsg, type AppCtx } from './ctx'
 import { useStore } from './useStore'
 import { dishOf, slotAt, splitList, tick, untick } from './logic'
@@ -8,16 +8,18 @@ import { todayRef } from './weeks'
 import { PlanTab } from './plan/PlanTab'
 import { ShoppingTab } from './shopping/ShoppingTab'
 import { DishesTab } from './dishes/DishesTab'
+import { SettingsTab } from './SettingsTab'
 import { DishSheet } from './DishSheet'
 import { IngredientsPrompt } from './plan/IngredientsPrompt'
 import { Toast, type ToastData } from './ui/Toast'
 
-type Tab = 'plan' | 'shopping' | 'dishes'
+type Tab = 'plan' | 'shopping' | 'dishes' | 'settings'
 
 const TABS: { id: Tab; label: string; Icon: typeof CalendarDays }[] = [
   { id: 'plan', label: 'Plan', Icon: CalendarDays },
   { id: 'shopping', label: 'Shopping', Icon: ShoppingCart },
   { id: 'dishes', label: 'Dishes', Icon: ChefHat },
+  { id: 'settings', label: 'Settings', Icon: Settings },
 ]
 
 /** The meal planner. Inside myApps, onSwitchApp leads back to the app picker. */
@@ -87,7 +89,8 @@ export default function MealsApp({ onSwitchApp }: { onSwitchApp?: () => void }) 
         <main className="safe-top no-scrollbar flex-1 overflow-y-auto pb-24">
           {tab === 'plan' && <PlanTab />}
           {tab === 'shopping' && <ShoppingTab />}
-          {tab === 'dishes' && <DishesTab onSwitchApp={onSwitchApp} />}
+          {tab === 'dishes' && <DishesTab />}
+          {tab === 'settings' && <SettingsTab onSwitchApp={onSwitchApp} />}
         </main>
 
         <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 mx-auto max-w-[430px] border-t border-sep bg-[#f9f9f9]/90 backdrop-blur-xl">

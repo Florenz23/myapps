@@ -14,6 +14,8 @@ import { NewListSheet } from './NewListSheet'
 import type { Board as BoardData } from './types'
 import { usePersistentBoard } from './usePersistentBoard'
 import { VersionLine } from './VersionLine'
+import { Sheet } from './Sheet'
+import { SettingsRows } from '../shell/SettingsRows'
 
 export function Board({ onSwitchApp }: { onSwitchApp?: () => void }) {
   const [board, dispatch] = usePersistentBoard()
@@ -26,6 +28,7 @@ function BoardView({ board, dispatch, onSwitchApp }: {
   dispatch: (action: Action) => void
   onSwitchApp?: () => void
 }) {
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [active, setActive] = useState(0)
   const [openCardId, setOpenCardId] = useState<string | null>(null)
   const [menuListId, setMenuListId] = useState<string | null>(null)
@@ -143,7 +146,13 @@ function BoardView({ board, dispatch, onSwitchApp }: {
       <DragOverlay>{draggingCard && <CardFace card={draggingCard} lifted />}</DragOverlay>
       </DndContext>
 
-      <VersionLine onSwitchApp={onSwitchApp} />
+      <VersionLine onOpenSettings={() => setSettingsOpen(true)} />
+
+      {settingsOpen && (
+        <Sheet title="Settings" onClose={() => setSettingsOpen(false)}>
+          <SettingsRows dark onSwitchApp={onSwitchApp} />
+        </Sheet>
+      )}
 
       {openCard && openList && (
         <CardSheet

@@ -1,8 +1,8 @@
-import { RefreshCw } from 'lucide-react'
-import { applyUpdateNow, BUILD_VERSION, checkNow, formatVersion, useUpdateStatus } from '../liveUpdate'
+import { RefreshCw, Settings } from 'lucide-react'
+import { applyUpdateNow, useUpdateStatus } from '../liveUpdate'
 
-// Which version is running, and what the live update is doing.
-export function VersionLine({ onSwitchApp }: { onSwitchApp?: () => void }) {
+// The banner when a live update is ready, and the way into the settings.
+export function VersionLine({ onOpenSettings }: { onOpenSettings: () => void }) {
   const status = useUpdateStatus()
   return (
     <>
@@ -18,22 +18,14 @@ export function VersionLine({ onSwitchApp }: { onSwitchApp?: () => void }) {
           </button>
         </div>
       )}
-      <div className="flex min-h-8 shrink-0 items-center justify-center gap-1 px-4 pb-1 text-[11px] text-white/40">
-        {onSwitchApp && (
-          <button type="button" onClick={onSwitchApp} className="min-h-8 px-2 active:text-white/70">
-            Switch app
-          </button>
-        )}
-        {onSwitchApp && BUILD_VERSION > 0 && <span>·</span>}
-        {/* Tap to look for an update right now */}
-        {BUILD_VERSION > 0 && (
-          <button type="button" onClick={checkNow} className="min-h-8 px-2 active:text-white/70">
-            Version {formatVersion(BUILD_VERSION)}
-            {status.state === 'downloading' && ` · downloading ${formatVersion(status.version)}…`}
-            {status.state === 'error' && <span className="text-red-300"> · update check failed: {status.message}</span>}
-          </button>
-        )}
-      </div>
+      {/* Version, updates and Switch app live in the settings */}
+      <button
+        type="button"
+        onClick={onOpenSettings}
+        className="mx-auto flex min-h-8 shrink-0 items-center gap-1.5 px-4 pb-1 text-[12px] text-white/50 active:text-white/80"
+      >
+        <Settings className="size-3.5" /> Settings
+      </button>
     </>
   )
 }
