@@ -146,6 +146,17 @@
 - Capacitor for the iPhone; the phone chain is the one from my last video (kanban app → iPhone,
   SideStore, GitHub build, no Xcode)
 
+## 7b · One app, two apps inside — shown openly
+
+> A free Apple ID only allows 3 sideloaded apps (see the last video). So the meal planner is **not**
+> a new iPhone app: it moves into the **existing kanban app** from the last video, and we say so on camera.
+
+- The meal planner is built here, as its own web app. The kanban app's shell bundles it under
+  `/meals/*`, next to `/kanban/*` (the kanban spec already nested its routes for this)
+- First screen of the installed app: pick **Kanban** or **Meal Planner**. The app remembers the
+  choice and opens it straight away next time; a small switch gets you back to the picker
+- Same app id as before, so it takes no extra slot
+
 ## 8 · Done when
 
 - [ ] Everything in §1 and §2 works on the phone with touch only
