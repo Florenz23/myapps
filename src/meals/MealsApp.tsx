@@ -9,6 +9,7 @@ import { PlanTab } from './plan/PlanTab'
 import { ShoppingTab } from './shopping/ShoppingTab'
 import { DishesTab } from './dishes/DishesTab'
 import { SettingsTab } from './SettingsTab'
+import { UpdateBanner } from './UpdateBanner'
 import { DishSheet } from './DishSheet'
 import { IngredientsPrompt } from './plan/IngredientsPrompt'
 import { Toast, type ToastData } from './ui/Toast'
@@ -110,6 +111,7 @@ export default function MealsApp({ onSwitchApp }: { onSwitchApp?: () => void }) 
           </div>
         </nav>
 
+        {!toastData && <UpdateBanner />}
         {toastData && <Toast data={toastData} onDone={() => setToastData(null)} />}
 
         {dishOpen && (
