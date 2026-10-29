@@ -1,0 +1,18 @@
+/* The kanban app's own look (from EN-62). Loaded only when Kanban is the open app. */
+body {
+  background: #0b1a45;
+  color: white;
+}
+
+.board-bg {
+  background:
+    radial-gradient(ellipse at 55% 75%, rgba(70, 90, 160, 0.45), transparent 60%),
+    linear-gradient(170deg, #1f3f8f 0%, #13265e 45%, #0b1a45 100%);
+}
+
+/* Long-press picks a card up — no iOS text selection or callout menu on top of that */
+.card-touch { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+
+/* The sheet handles vertical swipes itself (swipe down to close); text fields scroll as usual */
+.sheet-swipe { touch-action: none; }
+.sheet-swipe textarea { touch-action: auto; }
