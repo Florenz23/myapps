@@ -156,6 +156,8 @@
 - First screen of the installed app: pick **Kanban** or **Meal Planner**. The app remembers the
   choice and opens it straight away next time; a small switch gets you back to the picker
 - Same app id as before, so it takes no extra slot
+- **One new phone build + SideStore reinstall** for the shell: the app is renamed **myApps** and gets a
+  new icon (an app grid in the clean iOS style, green on white). After that, updates go live again
 
 ## 8 · Done when
 
