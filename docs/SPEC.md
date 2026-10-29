@@ -61,6 +61,8 @@
   still counts
 - Counts include every spelling. Upper/lower case never makes two dishes
 - A book icon on the day shows when the dish has preparation steps
+- **Dishes tab:** tap a dish to open the same details sheet as from the plan; swipe to delete (with
+  Undo). Days already planned keep the name as plain text, they only lose the link to the dish
 
 ### Ingredients are learned, not looked up
 - No recipe database. The first time you tick a dish with no ingredients, the app asks for them
