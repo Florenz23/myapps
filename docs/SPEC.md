@@ -158,7 +158,7 @@
   choice and opens it straight away next time; a small switch gets you back to the picker
 - Same app id as before, so it takes no extra slot
 - **One new phone build + SideStore reinstall** for the shell: the app is renamed **myApps** and gets a
-  new icon (an app grid in the clean iOS style, green on white). After that, updates go live again
+  new icon: option 3 in `mockups/myapps-icon-options-*.jpeg`, a white 2×2 grid on an iOS-green gradient. After that, updates go live again
 
 ## 8 · Done when
 
