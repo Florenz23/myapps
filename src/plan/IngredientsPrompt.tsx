@@ -15,7 +15,7 @@ export function IngredientsPrompt({ dishName, onSave, onCancel }: {
   }, [onCancel])
 
   return (
-    <div className="fixed inset-0 z-50 mx-auto flex max-w-[430px] items-center justify-center px-12">
+    <div className="fixed inset-0 z-50 mx-auto flex max-w-[430px] items-start justify-center px-12 pt-[24vh]">
       <div className="anim-fade absolute inset-0 bg-black/30" onClick={onCancel} />
       <div className="anim-pop relative w-full max-w-[290px] overflow-hidden rounded-[14px] bg-[#f2f2f2]/95 text-center backdrop-blur-xl">
         <div className="px-4 pt-5 pb-4">
@@ -28,7 +28,7 @@ export function IngredientsPrompt({ dishName, onSave, onCancel }: {
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && onSave(text)}
-            placeholder="pasta, tuna, sweetcorn"
+            placeholder="e.g. rice, onions, cream"
             enterKeyHint="done"
             className="mt-3 h-9 w-full rounded-[7px] border border-sep bg-white px-2 text-[16px] outline-none"
           />

@@ -202,10 +202,16 @@ export const clampDays = (n: number) => Math.min(7, Math.max(1, Math.round(n) ||
 export function cleanList(xs: string[]): string[] {
   const out: string[] = []
   for (const x of xs) {
-    const t = x.trim().replace(/\s+/g, ' ')
+    const t = capitalize(x)
     if (t && !out.some((o) => norm(o) === norm(t))) out.push(t)
   }
   return out
+}
+
+/** "dough" → "Dough": typed items read like a list, whatever the keyboard did */
+export function capitalize(x: string): string {
+  const t = x.trim().replace(/\s+/g, ' ')
+  return t.charAt(0).toUpperCase() + t.slice(1)
 }
 
 export const splitList = (text: string) => cleanList(text.split(','))
@@ -235,7 +241,7 @@ const onMain = (s: State, n: string) => s.main.some((i) => norm(i.text) === n)
 function addTracked(s: State, text: string, tickId: string): boolean {
   const n = norm(text)
   if (onMain(s, n)) return false
-  s.main.push({ id: newId(), text: text.trim() })
+  s.main.push({ id: newId(), text: capitalize(text) })
   ;(s.tickAdds[tickId] ??= []).push(n)
   return true
 }
@@ -304,7 +310,7 @@ function makeYours(s: State, text: string) {
 
 /** Adds an item to the main list unless it is already there. */
 export function addToMain(s: State, text: string): boolean {
-  const t = text.trim()
+  const t = capitalize(text)
   if (!t || onMain(s, norm(t))) return false
   s.main.push({ id: newId(), text: t })
   return true
@@ -312,7 +318,7 @@ export function addToMain(s: State, text: string): boolean {
 
 export function addToList(s: State, list: ListName, text: string): boolean {
   if (list === 'main') return addToMain(s, text)
-  const t = text.trim()
+  const t = capitalize(text)
   if (!t || s[list].some((i) => norm(i.text) === norm(t))) return false
   s[list].push({ id: newId(), text: t })
   return true

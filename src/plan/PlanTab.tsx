@@ -3,10 +3,18 @@ import { ChevronLeft, ChevronRight, Plus, ShoppingCart } from 'lucide-react'
 import { useApp } from '../ctx'
 import { ensureWeek, tickWeek } from '../logic'
 import type { DayRef } from '../types'
-import { shiftWeek, weekNumber, weekRange, weekYear } from '../weeks'
+import { mondayOf, shiftWeek, weekNumber, weekRange, weekYear } from '../weeks'
 import { DayRow } from './DayRow'
 import { PickerSheet } from './PickerSheet'
 import { CellMenu } from './CellMenu'
+
+function weekStatus(key: string, current: string): string {
+  const diff = Math.round((mondayOf(key).getTime() - mondayOf(current).getTime()) / (7 * 86_400_000))
+  if (diff === 0) return 'This week'
+  if (diff === 1) return 'Next week'
+  if (diff === -1) return 'Last week'
+  return diff > 0 ? `In ${diff} weeks` : `${-diff} weeks ago`
+}
 
 /** One week at a time, the 7 days stacked. Swipe or arrows change the week. */
 export function PlanTab() {
@@ -14,7 +22,10 @@ export function PlanTab() {
   const [viewKey, setViewKey] = useState(today.key)
   const [picker, setPicker] = useState<DayRef | null>(null)
   const [menu, setMenu] = useState<DayRef | null>(null)
-  const touch = useRef<{ x: number; y: number } | null>(null)
+  // The week follows the finger and slides in from the side it came from
+  const touch = useRef<{ x: number; y: number; horizontal?: boolean } | null>(null)
+  const [dragX, setDragX] = useState<number | null>(null)
+  const [slide, setSlide] = useState<'' | 'from-right' | 'from-left'>('')
 
   const keys = Object.keys(state.weeks).sort()
   const prev = keys.filter((k) => k < viewKey).at(-1)
@@ -22,10 +33,17 @@ export function PlanTab() {
   const days = state.weeks[viewKey] ?? Array(7).fill(null)
   const isPast = viewKey < today.key
 
+  const go = (key: string | undefined, from: 'from-right' | 'from-left') => {
+    if (!key || key === viewKey) return
+    setSlide(from)
+    setViewKey(key)
+  }
+  const goTo = (key: string) => go(key, key > viewKey ? 'from-right' : 'from-left')
+
   const addWeek = () => {
     const key = shiftWeek(keys.at(-1)!, 1)
     update((s) => ensureWeek(s, key))
-    setViewKey(key)
+    go(key, 'from-right')
   }
 
   const shopWeek = () => {
@@ -36,22 +54,37 @@ export function PlanTab() {
   return (
     <div
       onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
+      onTouchMove={(e) => {
+        const t = touch.current
+        if (!t || picker || menu) return
+        const dx = e.touches[0].clientX - t.x
+        const dy = e.touches[0].clientY - t.y
+        if (t.horizontal === undefined && Math.hypot(dx, dy) > 10) t.horizontal = Math.abs(dx) > Math.abs(dy) * 1.2
+        if (!t.horizontal) return
+        const blocked = (dx < 0 && !next) || (dx > 0 && !prev)
+        setDragX(blocked ? dx / 4 : dx)
+      }}
       onTouchEnd={(e) => {
         const t = touch.current
         touch.current = null
+        setDragX(null)
         if (!t || picker || menu) return
         const dx = e.changedTouches[0].clientX - t.x
         const dy = e.changedTouches[0].clientY - t.y
-        if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return
-        if (dx < 0 && next) setViewKey(next)
-        if (dx > 0 && prev) setViewKey(prev)
+        if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.2) return
+        if (dx < 0) go(next, 'from-right')
+        else go(prev, 'from-left')
+      }}
+      onTouchCancel={() => {
+        touch.current = null
+        setDragX(null)
       }}
     >
       <header className="flex items-center justify-between px-2 pt-3">
         <button
           aria-label="Previous week"
           disabled={!prev}
-          onClick={() => prev && setViewKey(prev)}
+          onClick={() => go(prev, 'from-left')}
           className="flex h-11 w-11 items-center justify-center text-label2 disabled:opacity-30"
         >
           <ChevronLeft size={28} />
@@ -63,36 +96,38 @@ export function PlanTab() {
             {weekYear(viewKey) !== weekYear(today.key) && ` · ${weekYear(viewKey)}`}
           </div>
         </div>
-        {next ? (
-          <button
-            aria-label="Next week"
-            onClick={() => setViewKey(next)}
-            className="flex h-11 w-11 items-center justify-center text-label2"
-          >
-            <ChevronRight size={28} />
-          </button>
-        ) : (
-          <button aria-label="Add week" onClick={addWeek} className="flex h-11 w-11 items-center justify-center text-accent-ink">
-            <Plus size={26} />
-          </button>
-        )}
+        <button
+          aria-label="Next week"
+          disabled={!next}
+          onClick={() => go(next, 'from-right')}
+          className="flex h-11 w-11 items-center justify-center text-label2 disabled:opacity-30"
+        >
+          <ChevronRight size={28} />
+        </button>
       </header>
 
       <div className="flex h-11 items-center justify-between px-4">
-        {viewKey !== today.key ? (
-          <button onClick={() => setViewKey(today.key)} className="h-11 text-[15px] font-medium text-accent-ink">
-            {isPast ? 'Past week · back to today' : 'Back to this week'}
+        <div className="flex items-center gap-3 text-[15px]">
+          <span className="text-label2">{weekStatus(viewKey, today.key)}</span>
+          {viewKey !== today.key && (
+            <button onClick={() => goTo(today.key)} className="h-11 font-medium text-accent-ink">
+              Today
+            </button>
+          )}
+        </div>
+        {!isPast && (
+          <button onClick={shopWeek} className="flex h-11 items-center gap-1.5 text-[15px] font-medium text-accent-ink">
+            <ShoppingCart size={18} />
+            Week to list
           </button>
-        ) : (
-          <span className="text-[15px] text-label2">This week</span>
         )}
-        <button onClick={shopWeek} className="flex h-11 items-center gap-1.5 text-[15px] font-medium text-accent-ink">
-          <ShoppingCart size={18} />
-          Week to list
-        </button>
       </div>
 
-      <div className="flex flex-col gap-2 px-4">
+      <div
+        key={viewKey}
+        className={`flex flex-col gap-2 px-4 ${slide ? `anim-${slide}` : ''}`}
+        style={dragX !== null ? { transform: `translateX(${dragX}px)` } : { transition: 'transform 0.25s ease' }}
+      >
         {days.map((_, idx) => (
           <DayRow
             key={`${viewKey}#${idx}`}

@@ -68,10 +68,10 @@ describe('plan', () => {
 describe('the rules between the plan and the main list', () => {
   it('2 + 10: ticking adds only what is not on the list yet', () => {
     const { s, id } = setup()
-    addToMain(s, 'onions')
+    addToMain(s, 'Onions')
     placeDish(s, day(0), id('Chili'), today)
     expect(tick(s, day(0), today)).toBe(3)
-    expect(main(s)).toEqual(['onions', 'Minced beef', 'Kidney beans', 'Chopped tomatoes'])
+    expect(main(s)).toEqual(['Onions', 'Minced beef', 'Kidney beans', 'Chopped tomatoes'])
   })
 
   it('3: unticking never touches your own items, and keeps what another tick needs', () => {

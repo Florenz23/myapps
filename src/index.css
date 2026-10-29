@@ -43,3 +43,7 @@ input, textarea { font-size: 17px; }
 .anim-sheet { animation: sheet-up 0.28s cubic-bezier(0.2, 0.9, 0.3, 1); }
 .anim-fade { animation: fade-in 0.2s ease-out; }
 .anim-pop { animation: pop-in 0.2s ease-out; }
+@keyframes from-right { from { transform: translateX(60%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes from-left { from { transform: translateX(-60%); opacity: 0; } to { transform: none; opacity: 1; } }
+.anim-from-right { animation: from-right 0.28s cubic-bezier(0.2, 0.9, 0.3, 1); }
+.anim-from-left { animation: from-left 0.28s cubic-bezier(0.2, 0.9, 0.3, 1); }

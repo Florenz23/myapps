@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { BookOpen } from 'lucide-react'
+import { BookOpen, CornerDownRight } from 'lucide-react'
 import { useApp } from '../ctx'
 import { coverAt, dishOf, slotName } from '../logic'
 import type { DayRef } from '../types'
@@ -54,7 +54,11 @@ export function DayRow({ at, onTap, onLongPress }: { at: DayRef; onTap: () => vo
   if (!cover) {
     content = <span className="text-[17px] text-label2 italic">Tap to pick a dish</span>
   } else if (cover.offset > 0) {
-    content = <span className="text-[17px] text-label2 italic">↳ leftovers</span>
+    content = (
+      <span className="flex items-center gap-1.5 text-[17px] text-label2 italic">
+        <CornerDownRight size={17} strokeWidth={1.8} /> leftovers
+      </span>
+    )
   } else {
     const slot = cover.slot
     const dish = dishOf(state, slot)

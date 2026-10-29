@@ -29,8 +29,8 @@ export function ItemList({ list }: { list: ListName }) {
   const add = () => {
     const text = draft.trim()
     if (!text) return
-    if (update((s) => addToList(s, list, text))) setDraft('')
-    else toast(`“${text}” is already on the list`)
+    if (!update((s) => addToList(s, list, text))) toast(`“${text}” is already on the list`)
+    setDraft('')
   }
 
   return (

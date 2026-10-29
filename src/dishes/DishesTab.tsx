@@ -79,7 +79,7 @@ function DishRow({ dish, count, open, onSwipe, onTap }: {
 
   return (
     <div className="relative overflow-hidden border-b border-sep last:border-b-0">
-      <button
+      {offset < 0 && <button
         aria-label={`Delete ${dish.name}`}
         onClick={() => {
           onSwipe(false)
@@ -89,7 +89,7 @@ function DishRow({ dish, count, open, onSwipe, onTap }: {
         style={{ width: DELETE_W }}
       >
         Delete
-      </button>
+      </button>}
       <div
         role="button"
         tabIndex={0}
