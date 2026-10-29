@@ -168,10 +168,10 @@
 
 ## 8 · Done when
 
-- [ ] Everything in §1 and §2 works on the phone with touch only
-- [ ] All 10 rules in "The rules between the plan and the main list" hold
-- [ ] The plan survives closing and reopening the app
-- [ ] Installed on the iPhone, opens from the home screen, no browser bar
+- [x] Everything in §1 and §2 works on the phone with touch only
+- [x] All 10 rules in "The rules between the plan and the main list" hold
+- [x] The plan survives closing and reopening the app
+- [x] Installed on the iPhone, opens from the home screen, no browser bar
 
 ## 8b · The look — picked from mockups
 
@@ -192,7 +192,6 @@
 
 - **Deleting a week:** not in this version
 - **A real database** (sync between phone and computer): its own short follow-up video
-- Live updates without reinstalling (Capgo, see the last video)
 
 > Your results can look different from mine, or not work the first time. That's normal — tell
 > Claude Code what you see and fix one thing at a time.
