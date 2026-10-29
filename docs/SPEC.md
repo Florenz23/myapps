@@ -131,7 +131,8 @@
   list of items that ticks added
 - **Starter dishes on first start**, so the app is not empty: Chili (3 days), Spaghetti Bolognese (2),
   Curry (2), Fish fingers, Tuna pasta, Gnocchi with spinach, Pancakes (weekend), Lasagne (2, weekend),
-  each with a few ingredients. "Always" starts with eggs, bread, cheese; "If empty" with milk, salad, tomatoes
+  each with a few ingredients. "Always" starts with eggs, bread, cheese; "If empty" with milk, salad, tomatoes. Plus **~6 filled past weeks** of these dishes (unticked), so the picker's sorting, the
+  counts and swiping back show something from the first start
 
 ## 6 · Capacitor-friendly from the first line
 
