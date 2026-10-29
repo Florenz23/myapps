@@ -18,7 +18,7 @@
 |---|---|---|
 | Week plan | One row per calendar week, 7 columns Monday to Sunday. The current week is highlighted | `01` |
 | Weeks appear by themselves | The current week and the next 3 always exist, so planning never starts with a click. "+ Add week" (+ Woche hinzufügen) adds the next one | `01` |
-| Past weeks | Hidden behind "Show past weeks (33)" (Vergangene Wochen zeigen). Kept as history | `01` |
+| Past weeks | The reference hides them behind "Show past weeks (33)" (Vergangene Wochen zeigen). Here you swipe back into them; still editable, kept as history | `01` |
 | Pick a dish | Tap a day → the dish picker | `02` |
 | Cell menu | Long-press a day → Edit dish · Change dish · Clear day | `03` |
 | Dish details | Ingredients, days in a row, preparation steps | `04` |
@@ -109,7 +109,8 @@
 
 - **Three tabs at the bottom:** Plan · Shopping · Dishes
 - **Plan = one week at a time.** The 7 days stacked as rows (day name left, dish right, checkbox
-  under the dish). Swipe or arrows to change the week; it opens on the current week
+  under the dish). Swipe or arrows to change the week; it opens on the current week. Swiping back goes into past
+  weeks, which stay editable (fixing a dish there fixes the counts; rule 6 still holds)
 - **Tap a day → picker as a bottom sheet.** Long-press → the cell menu as a sheet
 - **Shopping tab:** main list on top; Always and If empty below, folded
 - **Drag on touch:** long-press (~300 ms) a handle, then drag. Scrolling still works without the long-press
@@ -184,8 +185,6 @@
 ## 9 · Later, not now
 
 - **Deleting a week:** not in this version
-- **Past weeks on the phone** (swipe back into them or not, editable or not): decided later from
-  mockups. Until then they stay hidden behind "Show past weeks"
 
 - **Making it look good:** a separate step after this version works — the style is already picked (§8b)
 - Sync between phone and computer (needs a backend)
