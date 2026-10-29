@@ -4,8 +4,8 @@
 > This spec describes the meal planner I use every day (screenshots below, its UI is German).
 > Give this file to Claude Code and it builds the app from scratch: a **website** first, then a
 > **real app on an iPhone** (no Xcode, free Apple ID, nothing paid).
-> **The first version is plain on purpose.** It has to work, not look good. Making it look good is a
-> separate step later, from reference images.
+> **Build it in the picked look (§8b) from the first version.** The style was chosen from two
+> generated mockups; every view takes that style.
 
 ---
 
@@ -175,7 +175,7 @@
 > Four style options were generated (Gemini) for only two screens, Plan and Shopping, in
 > `mockups/`. The pick is **option B, clean iOS**. Every other view (picker sheet, cell menu,
 > dish details, Dishes tab, ingredients prompt, toasts) gets the **same style**:
-> no mockup per view, carry the look over.
+> no mockup per view, carry the look over. Built in this style from the first version, no plain step.
 
 ![Picked style](mockups/option-b-clean-ios-1793281789692.jpeg)
 
@@ -188,8 +188,6 @@
 ## 9 · Later, not now
 
 - **Deleting a week:** not in this version
-
-- **Making it look good:** a separate step after this version works — the style is already picked (§8b)
 - Sync between phone and computer (needs a backend)
 - Live updates without reinstalling (Capgo, see the last video)
 
