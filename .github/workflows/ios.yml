@@ -1,0 +1,78 @@
+name: iOS build (unsigned .ipa)
+
+# Manual only — never on push. Run it from the Actions tab: "Run workflow". Needed once for
+# native changes (name, icon, plugins); everything else arrives as a live update (web.yml).
+on:
+  workflow_dispatch:
+
+jobs:
+  ipa:
+    runs-on: macos-15
+    permissions:
+      contents: write # to publish the .ipa as a release download
+    steps:
+      - uses: actions/checkout@v4
+
+      # The app id of last video's Kanban: myApps installs over it, in the same slot.
+      - name: Name the build
+        run: |
+          echo "NAME=myApps" >> $GITHUB_ENV
+          echo "BUNDLE_ID=de.florenzerstling.kanban" >> $GITHUB_ENV
+          echo "TAG=latest" >> $GITHUB_ENV
+          echo "IPA=myApps.ipa" >> $GITHUB_ENV
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the web app
+        run: VITE_WEB_VERSION=$(git log -1 --format=%ct) pnpm build
+
+      - name: Copy it into the iOS project
+        run: npx cap sync ios
+
+      - name: Name the app on the home screen
+        run: /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $NAME" ios/App/App/Info.plist
+
+      - name: Build the app, unsigned
+        run: |
+          xcodebuild build \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Package as .ipa
+        run: |
+          mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -qr "$IPA" Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IPA }}
+          path: ${{ env.IPA }}
+
+      # A fixed link per app the iPhone can open in a browser, no GitHub login:
+      # https://github.com/<owner>/<repo>/releases/download/<tag>/<app>.ipa
+      - name: Publish as the app's latest download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete "$TAG" --cleanup-tag --yes || true
+          gh release create "$TAG" "$IPA" \
+            --prerelease \
+            --title "Latest $NAME build" \
+            --notes "Built from ${GITHUB_SHA::7}. On the iPhone: download $IPA, then open it in SideStore."

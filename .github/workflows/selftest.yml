@@ -1,0 +1,72 @@
+name: Self-test live update (iPhone Simulator)
+
+# Proves the live update works before anyone installs an .ipa: the app is built with an old
+# version number, opened in the iPhone Simulator, closed and opened again. The screenshots
+# show the version line before and after.
+on:
+  workflow_dispatch:
+
+jobs:
+  simulator:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Version 1 = older than anything published, so the app must update itself.
+      - name: Build the web part as an old version
+        run: VITE_WEB_VERSION=1 pnpm build
+
+      - name: Copy it into the iOS project
+        run: npx cap sync ios
+
+      - name: Build the app for the simulator
+        run: |
+          xcodebuild build \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO
+          codesign --force --deep --sign - build/Build/Products/Release-iphonesimulator/App.app
+
+      - name: Open it, close it, open it again
+        timeout-minutes: 4
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devs = [d for r, ds in json.load(sys.stdin)["devices"].items() if "iOS" in r for d in ds if d["name"].startswith("iPhone")]
+          print(devs[0]["udid"])')
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl install "$UDID" build/Build/Products/Release-iphonesimulator/App.app
+          mkdir shots
+          xcrun simctl launch --terminate-running-process "$UDID" de.florenzerstling.kanban
+          sleep 30
+          xcrun simctl io "$UDID" screenshot shots/1-first-open.png
+          xcrun simctl terminate "$UDID" de.florenzerstling.kanban || echo "app was not running"
+          sleep 3
+          xcrun simctl launch "$UDID" de.florenzerstling.kanban
+          sleep 15
+          xcrun simctl io "$UDID" screenshot shots/2-after-reopen.png
+          # What the app logged, and crash reports if it crashed
+          xcrun simctl spawn "$UDID" log show --last 3m --style compact \
+            --predicate 'process == "App"' > shots/app-log.txt 2>&1 || true
+          cp ~/Library/Logs/DiagnosticReports/App*.ips shots/ 2>/dev/null || echo "no crash reports"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: selftest-screenshots
+          path: shots

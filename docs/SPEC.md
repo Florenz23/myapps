@@ -143,6 +143,8 @@
 - **No sign-in, no backend, no database connection.** Your plan lives on your phone. On camera:
   "the app saves everything in the phone's local storage" (technically IndexedDB)
 - **Native plugins are opt-in**, each one needs a new phone build. List them here before adding them
+  - `@capgo/capacitor-updater`: live updates from GitHub releases (from the last video)
+  - `@capacitor/status-bar`: dark status-bar text on the light meal planner, light text on the dark kanban
 
 ## 7 · Stack
 

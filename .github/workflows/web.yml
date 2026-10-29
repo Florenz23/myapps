@@ -1,0 +1,53 @@
+name: Live update (web part)
+
+# On every push: build the web part and publish it for the installed apps to pick up.
+# Linux runner, ~30 s, no Mac needed. Native changes (plugins, icon) still need ios.yml.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: live-update
+  cancel-in-progress: true
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # The version is the commit time, so a newer push always has a higher number.
+      - name: Build the web part
+        run: |
+          VERSION=$(git log -1 --format=%ct)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          VITE_WEB_VERSION=$VERSION pnpm build
+
+      # The version goes into the file name; the app reads it from the release via the GitHub API.
+      - name: Zip it
+        run: |
+          (cd dist && zip -qr ../dist-$VERSION.zip .)
+          echo "TAG=web-myapps" >> $GITHUB_ENV
+
+      - name: Publish for the apps
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete "$TAG" --cleanup-tag --yes || true
+          gh release create "$TAG" "dist-$VERSION.zip" \
+            --prerelease \
+            --title "Live update: myApps" \
+            --notes "Web part from ${GITHUB_SHA::7}. Installed apps download it on their own."
