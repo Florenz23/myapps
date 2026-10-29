@@ -54,7 +54,7 @@
 - Tapping a "↳ leftovers" day opens the picker. Picking a dish there **splits the run**: the earlier
   dish ends the day before (its tick stays), the new dish starts on the tapped day
 - Picking a 3-day dish on Friday fills Friday, Saturday, Sunday. It **crosses into the next week**
-  when needed
+  when needed, and creates that week if it doesn't exist (a holiday gap)
 - The days are per occurrence: in the dish details, "days in a row" changes only this occurrence.
   More days overwrite the following days, fewer days give them back
 - Renaming a dish keeps its ingredients and keeps the old name as another spelling, so the history
