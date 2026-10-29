@@ -24,7 +24,7 @@
 | Dish details | Ingredients, days in a row, preparation steps | `04` |
 | Leftovers | A dish that lasts several days fills the following days. Those show "↳ leftovers" (Reste) and never shop | `01` |
 | Buy checkbox | Under each dish: a checkbox + "4 ingr." / "no shopping" (kein Einkauf) / "ingredients?" (Zutaten?) | `01` |
-| Week → list | Cart button at the end of a week row: all dishes of that week onto the shopping list | `05` |
+| Week → list | Cart button at the end of a week row: a shortcut that **ticks every unticked first day** of that week, so the rules in §2 apply as usual (unticking a day later removes its items again) | `05` |
 | Dishes overview | All dishes, how often they were eaten, their other spellings, weekday or weekend | `06` |
 | Shopping lists | Main list (Hauptliste) · Always (Immer dabei) · If empty (Falls leer) | `07` |
 | Saving | Every change saves by itself and survives closing the app | — |
@@ -51,6 +51,8 @@
 ### Dishes
 - A dish has: **name**, **other spellings** ("Gnocci" counts as "Gnocchi"), **weekday or weekend**,
   **default days in a row** (1–7), **ingredients** (a list), **preparation** (optional, one step per line)
+- Tapping a "↳ leftovers" day opens the picker. Picking a dish there **splits the run**: the earlier
+  dish ends the day before (its tick stays), the new dish starts on the tapped day
 - Picking a 3-day dish on Friday fills Friday, Saturday, Sunday. It **crosses into the next week**
   when needed
 - The days are per occurrence: in the dish details, "days in a row" changes only this occurrence.
@@ -83,7 +85,7 @@
 4. **Deleting an item by hand, editing it, or "Clear all"** makes it yours. It never comes back on its own
 5. **A leftover day never shops.** Only the first day of a multi-day dish has a checkbox
 6. **Past weeks are history.** Their ticks stay visible but no longer hold anything on the list
-7. **Changing or clearing a ticked day, or deleting its week,** first unticks it (rule 3)
+7. **Changing or clearing a ticked day** first unticks it (rule 3)
 8. **Changing a dish's ingredients** while it is ticked updates the list: new ingredients are added,
    removed ones go (rule 3)
 9. **Cancelling** the "which ingredients?" question (Cancel, Escape, tapping outside) leaves the day unticked
@@ -109,7 +111,7 @@
 - **Tap a day → picker as a bottom sheet.** Long-press → the cell menu as a sheet
 - **Shopping tab:** main list on top; Always and If empty below, folded
 - **Drag on touch:** long-press (~300 ms) a handle, then drag. Scrolling still works without the long-press
-- **Delete a week asks first.** Nothing else asks, but every delete shows a short "Undo" toast
+- **No confirm dialogs.** Every delete shows a short "Undo" toast instead
 - **Tap targets ≥ 44 px**, no hover-only controls, inputs ≥ 16 px so iOS doesn't zoom
 - **Safe areas** (notch, home indicator), `viewport-fit=cover`
 - **Wide screens (≥ 900 px):** the reference layout: the week table and the three lists side by side
@@ -150,6 +152,10 @@
 - [ ] Installed on the iPhone, opens from the home screen, no browser bar
 
 ## 9 · Later, not now
+
+- **Deleting a week:** not in this version
+- **Past weeks on the phone** (swipe back into them or not, editable or not): decided later from
+  mockups. Until then they stay hidden behind "Show past weeks"
 
 - **Making it look good:** a separate step, from reference images, after this version works
 - Sync between phone and computer (needs a backend)
