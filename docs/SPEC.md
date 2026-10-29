@@ -140,7 +140,8 @@
 - **Relative asset paths** (`base: './'`)
 - **Storage: IndexedDB via `idb-keyval`**, not `localStorage` (iOS can clear WebView localStorage).
   Load is async: show the starter data only after the load finds nothing
-- **No sign-in, no backend.** Your plan lives on your device
+- **No sign-in, no backend, no database connection.** Your plan lives on your phone. On camera:
+  "the app saves everything in the phone's local storage" (technically IndexedDB)
 - **Native plugins are opt-in**, each one needs a new phone build. List them here before adding them
 
 ## 7 · Stack
@@ -188,7 +189,7 @@
 ## 9 · Later, not now
 
 - **Deleting a week:** not in this version
-- Sync between phone and computer (needs a backend)
+- **A real database** (sync between phone and computer): its own short follow-up video
 - Live updates without reinstalling (Capgo, see the last video)
 
 > Your results can look different from mine, or not work the first time. That's normal — tell
