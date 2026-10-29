@@ -73,6 +73,8 @@
 - **Always:** things bought every time (eggs, bread). "→" moves one item to the main list, "All →" moves all
 - **If empty:** things you buy only when they run out (milk, salad). Same buttons
 - No duplicates on the main list: "Milk" and "milk" are the same item
+- **Tick off while shopping:** every main-list item has a checkbox. A ticked item greys out and is
+  struck through, and stays until "Clear all" or "Clear ticked". Ticking an item makes it yours (rule 4)
 
 ### The rules between the plan and the main list
 > This is the part that was buggy in my own version. Build it exactly like this.
@@ -151,13 +153,28 @@
 - [ ] Wide screen shows the week table and the three lists side by side
 - [ ] Installed on the iPhone, opens from the home screen, no browser bar
 
+## 8b · The look — picked from mockups
+
+> Four style options were generated (Gemini) for only two screens, Plan and Shopping, in
+> `mockups/`. The pick is **option B, clean iOS**. Every other view (picker sheet, cell menu,
+> dish details, Dishes tab, ingredients prompt, toasts, wide screen) gets the **same style**:
+> no mockup per view, carry the look over.
+
+![Picked style](mockups/option-b-clean-ios-1793281789692.jpeg)
+
+- Light grey grouped background, white inset grouped cards, hairline separators (like Apple Reminders)
+- System font (SF Pro / `system-ui`), large bold titles
+- One accent: a fresh green, for the active tab, "Clear all", "All →", status dots, today's row tint
+- Black checkboxes; muted grey italic for "↳ leftovers" and placeholders
+- Sheets and menus are native-looking iOS bottom sheets and action sheets
+
 ## 9 · Later, not now
 
 - **Deleting a week:** not in this version
 - **Past weeks on the phone** (swipe back into them or not, editable or not): decided later from
   mockups. Until then they stay hidden behind "Show past weeks"
 
-- **Making it look good:** a separate step, from reference images, after this version works
+- **Making it look good:** a separate step after this version works — the style is already picked (§8b)
 - Sync between phone and computer (needs a backend)
 - Live updates without reinstalling (Capgo, see the last video)
 
